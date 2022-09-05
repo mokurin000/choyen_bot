@@ -1,0 +1,4 @@
+[submodule "res"]
+	path = res
+	url = git@github.com:poly000/choyen_font_res
+	branch = main

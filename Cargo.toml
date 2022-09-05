@@ -1,0 +1,16 @@
+[package]
+authors = ["poly000"]
+license = "AGPL-3.0"
+name = "choyen_bot"
+version = "0.1.0"
+edition = "2021"
+repository = "https://github.com/poly000/choyen_bot"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+choyen_5000 = "0.1.2"
+teloxide = { version = "0.10.1", features = ["macros"] }
+log = "0.4"
+pretty_env_logger = "0.4"
+tokio = { version =  "1.8", features = ["rt-multi-thread", "macros"] }
