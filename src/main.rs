@@ -36,12 +36,12 @@ async fn answer(
         }
         Command::Choyen(text) => {
             let unique_id = message.id.0;
-            let file = PathBuf::from(&format!("temp/{unique_id}.png"));
+            let file = PathBuf::from(&format!("temp/{unique_id}.webp"));
 
             if let Some((top, bottom)) = text.split_once("|") {
                 generate_5000choyen(top, bottom, &file).unwrap();
                 let input_photo = InputFile::file(file);
-                bot.send_photo(message.chat.id, input_photo).await?
+                bot.send_animation(message.chat.id, input_photo).await?
             } else {
                 bot.send_message(message.chat.id, "usage:\n/choyen [top]|[bottom]")
                     .await?
