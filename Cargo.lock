@@ -79,9 +79,9 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
 name = "choyen_5000"
-version = "0.1.3"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f1ddfc514b5bf0d11ab47d10c290cc5fa51365d53ae619a2d0d7646543e4c417"
+checksum = "97261d7f2856bf549a1fb29a5590e5cf85ac9d3ae8d8a56279945c1e5c863987"
 dependencies = [
  "pyo3",
 ]
