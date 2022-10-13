@@ -1,6 +1,6 @@
 // generate_5000choyen(top, bottom, &file).unwrap();
 
-use std::{error::Error, path::PathBuf};
+use std::{ path::PathBuf};
 use teloxide::{prelude::*, types::InputFile, utils::command::BotCommands};
 
 use choyen_5000::generate_5000choyen;
@@ -9,12 +9,14 @@ use choyen_5000::generate_5000choyen;
 async fn main() {
     pretty_env_logger::init();
 
-    let bot = Bot::from_env().auto_send();
+    std::fs::create_dir_all("temp").unwrap();
+
+    let bot = Bot::from_env();
     teloxide::commands_repl(bot, answer, Command::ty()).await;
 }
 
 #[derive(BotCommands, Clone)]
-#[command(rename = "lowercase", description = "These commands are supported:")]
+#[command(rename_rule="lowercase", description = "These commands are supported:")]
 enum Command {
     #[command(description = "display this text.")]
     Help,
@@ -23,25 +25,25 @@ enum Command {
 }
 
 async fn answer(
-    bot: AutoSend<Bot>,
+    bot: Bot,
     message: Message,
     command: Command,
-) -> Result<(), Box<dyn Error + Send + Sync>> {
+) -> ResponseResult<()> {
     match command {
         Command::Help => {
             bot.send_message(message.chat.id, Command::descriptions().to_string())
                 .await?
         }
         Command::Choyen(text) => {
-            let unique_id = message.id;
+            let unique_id = message.id.0;
             let file = PathBuf::from(&format!("temp/{unique_id}.png"));
 
             if let Some((top, bottom)) = text.split_once("|") {
-                generate_5000choyen(top, bottom, &file)?;
+                generate_5000choyen(top, bottom, &file).unwrap();
                 let input_photo = InputFile::file(file);
                 bot.send_photo(message.chat.id, input_photo).await?
             } else {
-                bot.send_message(message.chat.id, "usage:\n/choyen {top}|{bottom}")
+                bot.send_message(message.chat.id, "usage:\n/choyen [top]|[bottom]")
                     .await?
             }
         }
