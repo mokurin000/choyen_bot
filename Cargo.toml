@@ -2,7 +2,7 @@
 authors = ["poly000"]
 license = "AGPL-3.0"
 name = "choyen_bot"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 repository = "https://github.com/poly000/choyen_bot"
 
