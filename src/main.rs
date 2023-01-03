@@ -6,8 +6,8 @@ use teloxide::{
     dispatching::DpHandlerDescription,
     prelude::*,
     types::{
-        InlineQuery, InlineQueryResult, InlineQueryResultArticle,
-        InputMessageContent, InputMessageContentText, InlineQueryResultCachedSticker,
+        InlineQuery, InlineQueryResult, InlineQueryResultArticle, InlineQueryResultCachedSticker,
+        InputMessageContent, InputMessageContentText,
     },
     types::{InputFile, MediaKind, MessageKind},
     utils::command::BotCommands,
@@ -134,9 +134,12 @@ async fn answer(bot: Bot, message: Message, command: Command) -> ResponseResult<
             if let Some((top, bottom)) = text.split_once("|") {
                 generate_5000choyen(top, bottom, &file).unwrap();
                 let input_photo = InputFile::file(file);
-                bot.send_animation(message.chat.id, input_photo).await?
+                bot.send_animation(message.chat.id, input_photo)
+                    .reply_to_message_id(message.id)
+                    .await?
             } else {
                 bot.send_message(message.chat.id, "usage:\n/choyen [top]|[bottom]")
+                    .reply_to_message_id(message.id)
                     .await?
             }
         }

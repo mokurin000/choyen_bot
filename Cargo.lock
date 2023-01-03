@@ -88,7 +88,7 @@ dependencies = [
 
 [[package]]
 name = "choyen_bot"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "choyen_5000",
  "log",
