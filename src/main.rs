@@ -128,8 +128,9 @@ async fn answer(bot: Bot, message: Message, command: Command) -> ResponseResult<
                 .await?
         }
         Command::Choyen(text) => {
-            let unique_id = message.id.0;
-            let file = PathBuf::from(&format!("temp/{unique_id}.webp"));
+            let msg_id = message.id.0;
+            let chat_id = message.chat.id.0;
+            let file = PathBuf::from(&format!("temp/{chat_id}_{msg_id}.webp"));
 
             if let Some((top, bottom)) = text.split_once("|") {
                 generate_5000choyen(top, bottom, &file).unwrap();
