@@ -26,10 +26,14 @@ async fn main() {
 
     let inline_handler = Update::filter_inline_query().branch(dptree::endpoint(
         |bot: Bot, q: InlineQuery| async move {
-            let results = if let Some((top, bottom)) = q.query.split_once("|") {
+            let splitted = q.query.split_once("|");
+            let results = if splitted.is_some() && unsafe{splitted.unwrap_unchecked()}.1.ends_with("$"){
                 let unique_id = &q.id;
                 let file = PathBuf::from(&format!("temp/{unique_id}.webp"));
-                generate_5000choyen(top, bottom, &file).unwrap();
+
+                let (top, bottom) = unsafe{splitted.unwrap_unchecked()};
+
+                generate_5000choyen(top, bottom.trim_end_matches("$"), &file).unwrap();
                 let input_photo = InputFile::file(file);
 
                 let upload_photo = bot.send_photo(PRAVITE_CHANNEL_ID.to_owned(), input_photo).send().await;
@@ -53,10 +57,11 @@ async fn main() {
                 }
             } else {
                 let content = InputMessageContent::Text(InputMessageContentText::new(
-                    "usage:\n/choyen [top]|[bottom]",
+                    "usage:\n@choyen_bot [top]|[bottom]$",
                 ));
                 let article =
-                    InlineQueryResultArticle::new("0", "usage:\n/choyen [top]|[bottom]", content);
+                    InlineQueryResultArticle::new("0", "usage:\n@choyen_bot [top]|[bottom]$", content,
+                );
                 vec![InlineQueryResult::Article(article)]
             };
 
@@ -68,12 +73,11 @@ async fn main() {
         },
     ));
 
-    Dispatcher::builder(bot.clone(), inline_handler)
+    Dispatcher::builder(bot, inline_handler)
         .enable_ctrlc_handler()
         .build()
         .dispatch()
         .await;
-    Command::repl(bot, answer).await;
 }
 
 #[derive(BotCommands, Clone)]
