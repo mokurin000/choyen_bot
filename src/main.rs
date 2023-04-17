@@ -16,7 +16,7 @@ use teloxide::{
 
 use choyen_5000::generate_5000choyen;
 
-const PRAVITE_CHANNEL_ID: &'static str = "-1001805077818";
+const PRAVITE_CHANNEL_ID: &'static str = "-1001918277621";
 
 #[tokio::main]
 async fn main() {
