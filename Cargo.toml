@@ -21,3 +21,5 @@ anyhow = "1.0.72"
 lto = true
 strip = true
 panic = "abort"
+opt-level = 3
+
