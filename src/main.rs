@@ -25,9 +25,6 @@ async fn main() -> Result<()> {
     pretty_env_logger::init();
 
     std::fs::create_dir_all("temp").unwrap();
-    let channel_id = std::env::var("CHOYEN_CHANNEL_ID")?;
-    let _ = PRAVITE_CHANNEL_ID.set(channel_id);
-
     let bot = Bot::from_env();
 
     let inline_handler = inline_handler();
@@ -79,7 +76,12 @@ fn inline_handler() -> teloxide::prelude::Handler<
             let input_photo = InputFile::file(file);
 
             let upload_photo = bot
-                .send_sticker(PRAVITE_CHANNEL_ID.get().unwrap().clone(), input_photo)
+                .send_sticker(
+                    PRAVITE_CHANNEL_ID
+                        .get_or_init(|| std::env::var("CHOYEN_CHANNEL_ID").unwrap())
+                        .clone(),
+                    input_photo,
+                )
                 .send()
                 .await;
             match upload_photo {
@@ -88,8 +90,8 @@ fn inline_handler() -> teloxide::prelude::Handler<
                     let kind = resp.kind;
                     if let MessageKind::Common(common) = kind {
                         if let MediaKind::Sticker(sticker) = common.media_kind {
-                            let file_id = &sticker.sticker.file.id;
-                            let cached_sticker = InlineQueryResultCachedSticker::new("0", file_id);
+                            let sticker_file_id = &sticker.sticker.file.id;
+                            let cached_sticker = InlineQueryResultCachedSticker::new("0", sticker_file_id);
                             results.push(InlineQueryResult::CachedSticker(cached_sticker));
                         }
                     }
