@@ -4,9 +4,10 @@ Another 5000choyen genertor bot in Rust.
 
 Based on [5000choyen](https://github.com/poly000/5000choyen).
 
-## Run this bot
+## Run
 
-you should edit `PRAVITE_CHANNEL_ID` in `src/main.rs` to yours or contact me to apply channel admin for your bot.
+`CHOYEN_CHANNEL_ID` - the channel id that bot could send stickers
+`TELOXIDE_TOKEN` - token from BotFather
 
 ## Usage
 

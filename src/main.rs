@@ -1,6 +1,6 @@
 // generate_5000choyen(top, bottom, &file).unwrap();
 
-use std::path::PathBuf;
+use std::{path::PathBuf, sync::OnceLock};
 
 use teloxide::{
     dispatching::DpHandlerDescription,
@@ -14,15 +14,19 @@ use teloxide::{
     RequestError,
 };
 
+use anyhow::Result;
+
 use choyen_5000::generate_5000choyen;
 
-const PRAVITE_CHANNEL_ID: &'static str = "-1001918277621";
+const PRAVITE_CHANNEL_ID: OnceLock<String> = OnceLock::new();
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<()> {
     pretty_env_logger::init();
 
     std::fs::create_dir_all("temp").unwrap();
+    let channel_id = std::env::var("CHOYEN_CHANNEL_ID")?;
+    let _ = PRAVITE_CHANNEL_ID.set(channel_id);
 
     let bot = Bot::from_env();
 
@@ -39,6 +43,7 @@ async fn main() {
     .build()
     .dispatch()
     .await;
+    Ok(())
 }
 
 #[derive(BotCommands, Clone)]
@@ -74,7 +79,7 @@ fn inline_handler() -> teloxide::prelude::Handler<
             let input_photo = InputFile::file(file);
 
             let upload_photo = bot
-                .send_sticker(PRAVITE_CHANNEL_ID.to_owned(), input_photo)
+                .send_sticker(PRAVITE_CHANNEL_ID.get().unwrap().clone(), input_photo)
                 .send()
                 .await;
             match upload_photo {

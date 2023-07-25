@@ -15,6 +15,7 @@ teloxide = { version = "0.11.0", features = ["macros", "ctrlc_handler"] }
 log = "0.4"
 pretty_env_logger = "0.4"
 tokio = { version =  "1", features = ["rt-multi-thread", "macros"] }
+anyhow = "1.0.72"
 
 [profile.release]
 lto = true
