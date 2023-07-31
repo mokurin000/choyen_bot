@@ -18,7 +18,7 @@ use anyhow::Result;
 
 use choyen_5000::generate_5000choyen;
 
-const PRAVITE_CHANNEL_ID: OnceLock<String> = OnceLock::new();
+const CACHE_CHAT_ID: OnceLock<String> = OnceLock::new();
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -77,8 +77,8 @@ fn inline_handler() -> teloxide::prelude::Handler<
 
             let upload_photo = bot
                 .send_sticker(
-                    PRAVITE_CHANNEL_ID
-                        .get_or_init(|| std::env::var("CHOYEN_CHANNEL_ID").unwrap())
+                    CACHE_CHAT_ID
+                        .get_or_init(|| std::env::var("CACHE_CHAT_ID").expect("please set \"CACHE_CHAT_ID\""))
                         .clone(),
                     input_photo,
                 )

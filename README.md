@@ -6,7 +6,7 @@ Based on [5000choyen](https://github.com/poly000/5000choyen).
 
 ## Run
 
-`CHOYEN_CHANNEL_ID` - the channel id that bot could send stickers
+`CACHE_CHAT_ID` - the chat id that bot could send stickers, to cache stickers for inline queries.
 `TELOXIDE_TOKEN` - token from BotFather
 
 ## Usage
